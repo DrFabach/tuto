@@ -1,0 +1,65 @@
+---
+title: "GGplot2"
+#output: learnr::tutorial
+#runtime: shiny_prerendered
+output: html_notebook
+---
+
+# Introduction à GGplot 2
+```{r}
+library(learnr)
+```
+
+## Installation 
+* The easiest way to get ggplot2 is to install the whole tidyverse:
+```{r}
+# install.packages("tidyverse")
+```
+
+* Alternatively, install just ggplot2:
+```{r}
+if(!require(ggplot2)) install.packages("ggplot2")
+```
+
+*  Or the development version from GitHub:
+```{r}
+# install.packages("devtools")
+# devtools::install_github("tidyverse/ggplot2")
+
+```
+
+
+```{r}
+library(ggplot2)
+```
+
+
+## Cheatsheet
+
+[![cheatsheat1](images/cheatsheet1.png)](https://rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.p )
+
+
+
+## Principe de base
+
+```
+ggplot(data = <DATA>, mapping = aes(<MAPPINGS>)) +  <GEOM_FUNCTION>()
+```
+
+*Aesthetic mappings*` décrit comment les variables de data sont mapper sur des formes géométriques
+
+
+
+```{r}
+#Code ne donnat rien, juste des données
+ggplot(mtcars)
+```
+
+```{r}
+#Code un graphiques vides car des données des aesthetic mappings mais pas d'aesthetic
+ggplot(mtcars, aes(x= mpg, y = drat ))
+```
+```{r essaui, exercise = TRUE}
+#Nuage de points
+ggplot(mtcars, aes(x= mpg, y = drat ))+geom_point()
+```
