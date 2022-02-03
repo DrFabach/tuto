@@ -1,0 +1,271 @@
+---
+title: "dplyr"
+output: html_notebook
+---
+
+# Gestion des données avec dplyr
+
+```{r}
+library(dplyr)
+```
+
+
+
+```{r}
+library(nycflights13)
+## Chargement des trois tables du jeu de données
+data(flights)
+data(airports)
+data(airlines)
+```
+
+ * tibble * 
+
+```{r}
+str(airlines)
+```
+
+
+```{r}
+# erreur airlines$carr
+as.data.frame(airlines)$carr
+```
+```{r}
+str(airlines[1,1])
+```
+```{r}
+str(airlines[[1]])
+```
+## Selections de lignes
+
+```{r}
+#base R
+airlines[1,]
+airlines[1:5,]
+
+
+#dplyr
+airlines%>%slice(1)
+slice(airlines,1)
+
+airlines%>%slice(1:5)
+
+```
+
+## filter des données
+
+```{r}
+#base R
+flights[flights$month==1,]
+
+#dplyr
+flights%>%filter(month==1)
+
+
+
+
+flights$month[1]<-NA
+flights[flights$month==1,]
+flights[which(flights$month==1),]
+
+flights%>%filter(month==1)
+```
+
+## Selection de colonne
+
+```{r}
+names(flights)
+#base R
+flights[,c("year","month","day")]%>%dim
+
+#dplyr
+flights%>%select(year,month, day)%>%dim
+flights%>%select(year: day)%>%dim
+
+#base R
+flights[,-which(names(flights)=="carrier")]%>%dim
+
+#dplyr
+flights%>%select(-carrier)%>%dim
+
+
+
+flights%>%select(starts_with("dep"))%>%dim
+
+
+
+flights%>%select( any_of(c("century", "year", "month", "day")))
+
+
+flights%>%select(where(is.character))
+
+
+
+#mettre la colonne name en premier
+airports%>%select( name, everything())
+airports%>%relocate(name)
+```
+
+
+## Modification du nom des colonnes
+
+```{r}
+# Modification simple
+airports%>%rename(longitude=lon, latitutde=lat)%>%names
+
+#Modification et selection
+airports%>%select(longitude=lon, latitutde=lat)%>%names
+
+```
+## Tri des données
+
+```{r}
+flights%>%arrange(month, dep_delay)
+```
+
+## Créer de nouvelles variables 
+
+
+```{r}
+airports%>%mutate(alt_m = alt/3.2808)%>%
+  select(name, alt, alt_m)
+
+#Equivalent à 
+
+select(
+  mutate(airports, alt_m = alt / 3.2808),
+  name, alt, alt_m
+)
+
+```
+
+
+```{r}
+#
+flights%>% mutate(distance_km = distance / 0.62137,
+                  vitesse = distance_km / air_time * 60)%>%
+  select( distance, distance_km, vitesse)
+```
+
+```{r}
+#
+flights%>% transmute(distance,distance_km = distance / 0.62137,
+                  vitesse = distance_km / air_time * 60)
+```
+
+
+
+# Les opérations groupées
+
+```{r}
+flights %>% group_by(month) %>% slice(1)
+```
+
+
+
+```{r}
+flights %>% 
+  group_by(month) %>% 
+  mutate(mean_delay_month = mean(dep_delay, na.rm = TRUE)) %>% 
+  select(dep_delay, month, mean_delay_month)
+```
+
+
+```{r}
+flights %>% 
+  group_by(month) %>% 
+  filter(dep_delay == max(dep_delay, na.rm = TRUE))
+```
+
+
+```{r}
+flights %>% 
+  group_by(month) %>% 
+  arrange(desc(dep_delay), .by_group = TRUE)
+```
+
+
+## Résumer des informations
+
+```{r}
+flights %>% 
+  summarise(retard_dep = mean(dep_delay, na.rm=TRUE),
+            retard_arr = mean(arr_delay, na.rm=TRUE))
+```
+```{r}
+flights %>%
+  group_by(dest) %>%
+  summarise(nb = n())
+```
+
+
+```{r}
+flights %>%
+  group_by(month) %>%
+  summarise(max_delay = max(dep_delay, na.rm=TRUE),
+            min_delay = min(dep_delay, na.rm=TRUE),
+            mean_delay = mean(dep_delay, na.rm=TRUE))
+```
+
+```{r}
+flights %>%
+  group_by(month, dest) %>%
+  summarise(nb = n()) %>%
+  arrange(desc(nb))
+```
+
+
+
+```{r}
+flights %>%
+  group_by(month, dest) %>%
+  summarise(nb = n()) %>% 
+  ungroup() %>% 
+  mutate(pourcentage = nb / sum(nb) * 100)
+```
+
+
+
+# Fonctions utiles?
+
+```{r}
+airports %>% sample_n(5)
+flights %>% sample_frac(0.1)
+flights %>%
+  select(day, month) %>%
+  distinct
+```
+
+
+# Plus complexe
+https://juba.github.io/tidyverse/15-dplyr-avance.html
+
+```{r}
+
+flights %>%
+    summarise(
+        across(
+            starts_with("dep"),
+            max,
+            na.rm = TRUE
+        )
+    )
+```
+
+```{r}
+restos <- tribble(
+    ~nom,                       ~cuisine, ~decor, ~accueil, ~prix,
+    "La bonne fourchette",             4,      2,        5,     4,
+    "La choucroute de l'amer",         3,      3,        2,     3,
+    "L'Hair de rien",                  1,      4,        4,     3,
+    "La blanquette de Vaulx",          5,      4,        4,     5,
+)
+```
+
+
+```{r}
+restos %>%
+    rowwise() %>%
+    mutate(decor_accueil = mean(c(decor, accueil)))
+```
+
