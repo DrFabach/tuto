@@ -268,4 +268,3 @@ restos %>%
     rowwise() %>%
     mutate(decor_accueil = mean(c(decor, accueil)))
 ```
-
