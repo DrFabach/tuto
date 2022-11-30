@@ -26,7 +26,7 @@ execute:
 
 ## <https://ggplot2-book.org>
 
-## Installation
+## Installation :
 
 -   GGplot2 est inclu dans le tidyverse . . .
 
@@ -57,7 +57,7 @@ library(ggplot2)
 
 [![](images/paste-BB7A68B4.png){fig-alt="image" width="600"}](https://thinkr.fr/pdf/ggplot2-french-cheatsheet.pdf)
 
-[![Ceci est un exemple d'image](https://example.com/bild.jpg)](https://example.com)
+[![Ceci est un exemple d\'image](https://example.com/bild.jpg)](https://example.com)
 
 ## Principe de base
 
@@ -307,16 +307,11 @@ grid.arrange(labelled,labelled_stylise, ncol = 2)
 
 -   [`theme_linedraw()`](https://ggplot2.tidyverse.org/reference/ggtheme.html): A theme with only black lines of various widths on white backgrounds, reminiscent of a line drawing.
 
------
--   [`theme_light()`](https://ggplot2.tidyverse.org/reference/ggtheme.html): similar to [`theme_linedraw()`](https://ggplot2.tidyverse.org/reference/ggtheme.html) but with light grey lines and axes, to direct more attention towards the data.
+| \- [`theme_light()`](https://ggplot2.tidyverse.org/reference/ggtheme.html): similar to [`theme_linedraw()`](https://ggplot2.tidyverse.org/reference/ggtheme.html) but with light grey lines and axes, to direct more attention towards the data. |
+|-------|
+| \- [`theme_minimal()`](https://ggplot2.tidyverse.org/reference/ggtheme.html): A minimalistic theme with no background annotations.                                                                                                               |
+| \- [`theme_classic()`](https://ggplot2.tidyverse.org/reference/ggtheme.html): A classic-looking theme, with x and y axis lines and no gridlines.                                                                                                 |
 
-
--   [`theme_dark()`](https://ggplot2.tidyverse.org/reference/ggtheme.html): the dark cousin of [`theme_light()`](https://ggplot2.tidyverse.org/reference/ggtheme.html), with similar line sizes but a dark background. Useful to make thin coloured lines pop out.
------
--   [`theme_minimal()`](https://ggplot2.tidyverse.org/reference/ggtheme.html): A minimalistic theme with no background annotations.
-
--   [`theme_classic()`](https://ggplot2.tidyverse.org/reference/ggtheme.html): A classic-looking theme, with x and y axis lines and no gridlines.
------
 -   [`theme_void()`](https://ggplot2.tidyverse.org/reference/ggtheme.html): A completely empty theme.
 
 ------------------------------------------------------------------------
